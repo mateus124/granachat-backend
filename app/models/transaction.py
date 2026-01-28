@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, Date
-from app.db.base import Base
+from db.base import Base
 
 class Transaction(Base):
     __tablename__ = "transactions"
