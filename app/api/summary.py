@@ -5,6 +5,8 @@ from datetime import date
 
 from db.deps import get_db
 from models.transaction import Transaction
+from core.deps import get_current_user
+from models.user import User
 
 router = APIRouter(prefix="/summary", tags=["Summary"])
 
@@ -12,7 +14,8 @@ router = APIRouter(prefix="/summary", tags=["Summary"])
 def month_summary(
     year: int = Query(..., description="Ano (ex: 2026)"),
     month: int = Query(..., ge=1, le=12, description="Mês (1-12)"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     start_date = date(year, month, 1)
 
@@ -27,6 +30,7 @@ def month_summary(
             func.sum(Transaction.valor)
         )
         .filter(
+            Transaction.user_id == current_user.id,
             Transaction.tipo == "despesa",
             Transaction.data >= start_date,
             Transaction.data < end_date

@@ -13,7 +13,7 @@ tags_metadata = [
         "description": "Operações de envio de mensagens",
     },
     {
-        "name": "ProdSummaryuto",
+        "name": "Summary",
         "description": "Operações de relatórios",
     },
 ]

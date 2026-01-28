@@ -5,15 +5,21 @@ from schemas.chat import ChatMessage
 from core.parser import parse_message
 from db.deps import get_db
 from models.transaction import Transaction
+from core.deps import get_current_user
+from models.user import User
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
 @router.post("/")
-def chat(payload: ChatMessage, db: Session = Depends(get_db)):
+def chat(
+    payload: ChatMessage,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     try:
         data = parse_message(payload.message)
 
-        transaction = Transaction(**data)
+        transaction = Transaction(**data, user_id=current_user.id)
         db.add(transaction)
         db.commit()
 
