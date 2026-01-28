@@ -1,42 +1,66 @@
 import re
 from datetime import date
 
+VALOR_REGEX = r'(\d+[.,]?\d*)'
+
+DESPESA_VERBOS = ["gastei", "gasto", "comprei", "paguei"]
+GANHO_VERBOS = ["ganhei", "recebi"]
+POUPANCA_VERBOS = ["guardei"]
+
 CATEGORIAS = {
-    "jantar": "alimentacao",
-    "almoço": "alimentacao",
-    "almoco": "alimentacao",
-    "salário": "renda",
-    "salario": "renda",
-    "presente": "extra",
-    "cofrinho": "poupanca",
+    "alimentacao": [
+        "jantar", "almoço", "almoco", "salgado", "pastel",
+        "cantina", "ifood", "lanche"
+    ],
+    "transporte": [
+        "passagem", "topic", "ônibus", "onibus", "uber"
+    ],
+    "moradia": [
+        "aluguel"
+    ],
+    "contas": [
+        "energia", "luz", "água", "agua", "internet"
+    ],
+    "renda": [
+        "salário", "salario"
+    ],
+    "poupanca": [
+        "cofrinho"
+    ]
 }
 
 def parse_message(message: str):
     text = message.lower()
 
-    if "gastei" in text or "gasto" in text or "comprei" in text:
+    if any(v in text for v in DESPESA_VERBOS):
         tipo = "despesa"
-    elif "ganhei" in text or "recebi" in text:
+    elif any(v in text for v in GANHO_VERBOS):
         tipo = "ganho"
-    elif "guardei" in text:
+    elif any(v in text for v in POUPANCA_VERBOS):
         tipo = "poupanca"
     else:
         raise ValueError("Não entendi o tipo da transação")
 
-    valor_match = re.search(r'(\d+)', text)
+    valor_match = re.search(VALOR_REGEX, text)
     if not valor_match:
         raise ValueError("Valor não encontrado")
 
-    valor = float(valor_match.group(1))
+    valor_str = valor_match.group(1)
+    valor = float(valor_str.replace(",", "."))
 
     categoria = "outros"
-    descricao = ""
-
-    for palavra, cat in CATEGORIAS.items():
-        if palavra in text:
+    for cat, palavras in CATEGORIAS.items():
+        if any(p in text for p in palavras):
             categoria = cat
-            descricao = palavra
             break
+
+    descricao = (
+        text
+        .replace(valor_str, "")
+        .replace("reais", "")
+        .replace("real", "")
+        .strip()
+    )
 
     return {
         "tipo": tipo,

@@ -17,6 +17,10 @@ tags_metadata = [
         "name": "Summary",
         "description": "Operações de relatórios",
     },
+    {
+        "name": "Auth",
+        "description": "Operações de login",
+    },
 ]
 
 app = FastAPI(
