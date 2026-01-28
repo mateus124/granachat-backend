@@ -5,3 +5,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     salario: float
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
