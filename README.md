@@ -4,7 +4,7 @@ API do **Granachat**, um app de controle financeiro por linguagem natural (estil
 
 ---
 
-## 🚀 Tecnologias
+## Tecnologias
 
 * **Python 3.11+**
 * **FastAPI**
@@ -12,7 +12,7 @@ API do **Granachat**, um app de controle financeiro por linguagem natural (estil
 * **Docker & Docker Compose** (PostgreSQL)
 * **SQLAlchemy**
 
-## ⚙️ Setup local (passo a passo)
+## Setup local (passo a passo)
 
 ### Clonar o repositório
 
