@@ -9,3 +9,12 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class UserResponse(BaseModel):
+    id: int
+    nome: str
+    email: EmailStr
+    salario: float
+
+    class Config:
+        from_attributes = True
